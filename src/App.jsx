@@ -4,6 +4,9 @@ import { useEffect } from "react";
 
 import Login from "./features/auth/Login";
 import Register from "./features/auth/Register";
+import VerifyOtp from "./features/auth/VerifyOtp";
+import ForgotPassword from "./features/auth/ForgotPassword";
+import ResetPassword from "./features/auth/ResetPassword";
 import Dashboard from "./features/dashboard/Dashboard";
 import AddIncome from "./features/income/AddIncome";
 import AddExpense from "./features/expense/AddExpense";
@@ -40,6 +43,18 @@ export default function App() {
         <Route
           path="/register"
           element={!isAuth ? <Register /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/verify-otp"
+          element={!isAuth ? <VerifyOtp /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/forgot-password"
+          element={!isAuth ? <ForgotPassword /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/reset-password"
+          element={!isAuth ? <ResetPassword /> : <Navigate to="/" />}
         />
 
         {/* PROTECTED ROUTES */}

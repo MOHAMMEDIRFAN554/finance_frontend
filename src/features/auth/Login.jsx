@@ -2,20 +2,29 @@ import { useDispatch } from "react-redux";
 import { login } from "./authSlice";
 import { useState } from "react";
 import AuthLayout from "./AuthLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    setError(null);
+    try {
+      await dispatch(login({ email, password })).unwrap();
+      navigate("/");
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message || "Login failed");
+    }
   };
 
   return (
     <AuthLayout title="Login">
+      {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={submit}>
         <input className="form-control mb-3" placeholder="Email"
           onChange={e => setEmail(e.target.value)} />
@@ -27,6 +36,8 @@ export default function Login() {
 
       <div className="text-center">
         New user? <Link to="/register">Register</Link>
+        <br />
+        <Link to="/forgot-password">Forgot Password?</Link>
       </div>
     </AuthLayout>
   );
