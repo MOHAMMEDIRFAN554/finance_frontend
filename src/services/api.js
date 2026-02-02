@@ -19,13 +19,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Failover for Network Errors (not 4xx/5xx responses, but connection failures)
+    // Failover for Network Errors
     if (!error.response && !originalRequest._failoverRetry) {
       originalRequest._failoverRetry = true;
-      if (api.defaults.baseURL === API_URLS.primary) {
-        console.warn("Primary API unreachable, switching to fallback:", API_URLS.fallback);
-        api.defaults.baseURL = API_URLS.fallback;
-        originalRequest.baseURL = API_URLS.fallback;
+
+      let nextBase = null;
+      if (api.defaults.baseURL === API_URLS.local) nextBase = API_URLS.primary;
+      else if (api.defaults.baseURL === API_URLS.primary) nextBase = API_URLS.secondary;
+
+      if (nextBase) {
+        console.warn(`API unreachable, switching to: ${nextBase}`);
+        api.defaults.baseURL = nextBase;
+        originalRequest.baseURL = nextBase;
         return api(originalRequest);
       }
     }
