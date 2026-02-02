@@ -1,6 +1,6 @@
 export const API_URLS = {
-  primary: "https://financebackend-production-3910.up.railway.app/api",
-  secondary: import.meta.env.VITE_API_URL,
+  primary: import.meta.env.VITE_API_URL || "https://financebackend-production-3910.up.railway.app/api",
+  secondary: "https://financebackend-production-3910.up.railway.app/api",
   local: "http://localhost:5000/api",
 };
 
